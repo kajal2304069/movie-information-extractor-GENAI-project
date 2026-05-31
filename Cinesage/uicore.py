@@ -5,14 +5,20 @@ from typing import List, Optional
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_mistralai import ChatMistralAI
 import streamlit as st
+import os
 
 load_dotenv()
 
 # ------------------ MODEL ------------------
-model = ChatMistralAI(
-    model="mistral-small-2506"
-)
+try:
+    api_key = st.secrets["MISTRAL_API_KEY"]
+except Exception:
+    api_key = os.getenv("MISTRAL_API_KEY")
 
+model = ChatMistralAI(
+    model="mistral-small-2506",
+    api_key=api_key
+)
 # ------------------ SCHEMA ------------------
 class Movie(BaseModel):
     title: str
